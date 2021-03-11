@@ -48,7 +48,6 @@ class DirectedGraph():
 
     def add_vertex(self, vertex):
         edges = self.edges
-        print(edges)
         edges[vertex] = {}
         self.edges = edges
     
