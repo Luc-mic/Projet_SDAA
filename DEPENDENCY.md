@@ -10,8 +10,8 @@ classDef not_done fill:#FF8000;
     1.2:::done
     1.3:::done
     1.4:::done
-    2.1:::not_done
-    2.2:::not_done
+    2.1:::done
+    2.2:::done
     2.3:::not_done
     2.4:::not_done
     3.0:::not_done
