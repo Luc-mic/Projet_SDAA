@@ -4,7 +4,6 @@ class DirectedGraph():
 
     def __init__(self, edges= {}):
         self.edges = edges
-        self.vertices = list(edges.keys())
 
     def __len__(self):
         return len(self.vertices)
@@ -37,6 +36,7 @@ class DirectedGraph():
             for weight in edges[vertex].values():
                 assert weight >= 0, "No negative weight !"
         self.__edges = edges
+        self.vertices = edges.keys()
     
     @property
     def vertices(self):
@@ -47,8 +47,10 @@ class DirectedGraph():
         self.__vertices = vertices
 
     def add_vertex(self, vertex):
-        self.edges[vertex] = {}
-        self.vertices.append(vertex)
+        edges = self.edges
+        print(edges)
+        edges[vertex] = {}
+        self.edges = edges
     
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
@@ -98,9 +100,9 @@ class DirectedGraph():
 
 class UndirectedGraph(DirectedGraph):
 
-    def __init(self, edges= {}):
-        DirectedGraph(edges)
-    
+    def __init__(self, edges= {}):
+        self.edges = edges
+
     @property
     def edges(self):
         return self.__edges
@@ -113,6 +115,7 @@ class UndirectedGraph(DirectedGraph):
             for neighboor in edges[vertex].keys():
                 assert vertex in edges[neighboor].keys() and edges[vertex][neighboor] == edges[neighboor][vertex], "Incorrect edges !"
         self.__edges = edges
+        self.vertices = edges.keys()
 
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
