@@ -115,6 +115,22 @@ class UndirectedGraph(DirectedGraph):
                 assert vertex in edges[neighboor].keys() and edges[vertex][neighboor] == edges[neighboor][vertex], "Incorrect edges !"
         self.__edges = edges
         self.vertices = edges.keys()
+    
+    def depth_search(self, initial):
+        visited = []
+
+        def depth_search_recursive(current):
+            for neighboor in self.edges[current]:
+                if neighboor not in visited:
+                    visited.append(neighboor)
+                    depth_search_recursive(neighboor)
+            
+        depth_search_recursive(initial)
+        return visited   
+
+    def is_connected(self):
+        initial = list(self.vertices)[0]
+        return len(self.vertices) == len(self.depth_search(initial))
 
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
