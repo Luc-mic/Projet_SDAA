@@ -12,8 +12,13 @@ classDef not_done fill:#FF8000;
     1.4:::done
     2.1:::done
     2.2:::done
+<<<<<<< HEAD
     2.3:::done
     2.4:::done
+=======
+    2.3:::not_done
+    2.4:::not_done
+>>>>>>> 099cdaee87d494e0dc6372041d6d7751cebf873c
     3.0:::not_done
     3.1:::not_done
     3.2:::not_done
