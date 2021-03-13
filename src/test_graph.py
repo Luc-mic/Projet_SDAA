@@ -26,6 +26,19 @@ def test_directed_graph():
     print("\nTest 6")
     graph.remove_edge(1, 2)
     print(graph)
+    print("\nTest 8")
+    print(graph.induced_graph(graph.edges.keys(), False))# affiche le même graphe rendu non-orienté
+    print("\nTest 9")
+    print(graph.is_complete()) # Affiche False
+    print("\nTest 10") 
+    graph.add_edge(1, 2, 1)
+    graph.add_edge(1, 3, 1)
+    graph.add_edge(3, 2, 1)
+    graph.add_edge(3, 1, 1)
+
+    print(graph.is_complete()) # Affiche True
+
+
 
 def test_undirected_graph():
     print("Tests UndirectedGraph")
@@ -60,6 +73,13 @@ def test_undirected_graph():
     print(undir_graph.is_connected()) # affiche False
     undir_graph.add_edge(1, 2, 1)
     print(undir_graph.is_connected()) # affiche True
+
+    print("\nTest 9")
+    print(undir_graph.is_complete()) # Affiche False
+
+    print("\nTest 10") 
+    undir_graph.add_edge(1, 3, 1)
+    print(undir_graph.is_complete()) # Affiche True
 
 test_directed_graph()
 test_undirected_graph()

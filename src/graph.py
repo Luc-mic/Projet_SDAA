@@ -46,6 +46,24 @@ class DirectedGraph():
     def vertices(self, vertices):
         self.__vertices = vertices
 
+    def is_complete(self):
+        for vertex in self.vertices:
+            if len(self.edges[vertex].keys()) != len(self.vertices) - 1:
+                return False
+        return True
+
+    def depth_search(self, initial):
+        visited = []
+
+        def depth_search_recursive(current):
+            for neighboor in self.edges[current]:
+                if neighboor not in visited:
+                    visited.append(neighboor)
+                    depth_search_recursive(neighboor)
+            
+        depth_search_recursive(initial)
+        return visited   
+
     def add_vertex(self, vertex):
         edges = self.edges
         edges[vertex] = {}
@@ -56,7 +74,7 @@ class DirectedGraph():
         del self.edges[vertex]
         self.vertices.remove(vertex)
         
-        for other in self.edges.keys():
+        for other in self.vertices:
             self.remove_edge(other,vertex) 
             
     def add_edge(self, vertex1, vertex2, weight):
@@ -86,16 +104,23 @@ class DirectedGraph():
         for vertex in vertices:
             self.remove_vertex(vertex)
         
-    def induced_graph(self, subset):
+    def induced_graph(self, subset, directed=True):
+        assert type(directed) == bool, "Directed argument must be bool"
         new_edges = {}
 
         for vertex in subset:
             assert vertex in self.vertices, "Incorrect subset, vertex not in graph"
             new_edges[vertex] = {}
+        for vertex in subset:
             for other in subset:
                 if other in self.edges[vertex].keys():
                     new_edges[vertex][other] = self.edges[vertex][other]
-        return DirectedGraph(new_edges)
+                    if directed == False and vertex not in new_edges[other].keys():
+                            new_edges[other][vertex] = self.edges[vertex][other]
+        if directed == True:
+            return DirectedGraph(new_edges)
+        else:
+            return UndirectedGraph(new_edges)
 
 class UndirectedGraph(DirectedGraph):
 
@@ -116,27 +141,15 @@ class UndirectedGraph(DirectedGraph):
         self.__edges = edges
         self.vertices = edges.keys()
     
-    def depth_search(self, initial):
-        visited = []
-
-        def depth_search_recursive(current):
-            for neighboor in self.edges[current]:
-                if neighboor not in visited:
-                    visited.append(neighboor)
-                    depth_search_recursive(neighboor)
-            
-        depth_search_recursive(initial)
-        return visited   
-
     def is_connected(self):
         initial = list(self.vertices)[0]
-        return len(self.vertices) == len(self.depth_search(initial))
+        return len(self.vertices) == len(self.depth_search(initial))   
 
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
         del self.edges[vertex]
         
-        for other in self.edges.key():
+        for other in self.vertices:
             self.remove_edge(other,vertex) 
 
         self.vertices.remove(vertex)
