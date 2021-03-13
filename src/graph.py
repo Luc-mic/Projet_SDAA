@@ -1,8 +1,9 @@
 from copy import copy
 
+
 class DirectedGraph():
 
-    def __init__(self, edges= {}):
+    def __init__(self, edges={}):
         self.edges = edges
 
     def __len__(self):
@@ -15,14 +16,18 @@ class DirectedGraph():
     def __iter__(self):
         for vertex in self.vertices:
             yield vertex
-           
+
     def __str__(self):
+
         text = ""
 
         for vertex in self.vertices:
             text += str(vertex) + " :"
+
             for neighboor in self.edges[vertex].keys():
-                text += " (\"" + str(neighboor) + "\" : " + str(self.edges[vertex][neighboor]) + "),"
+                text += " (\"" + str(neighboor) + "\" : " + \
+                    str(self.edges[vertex][neighboor]) + "),"
+
             text += "\n"
         return text
 
@@ -37,7 +42,7 @@ class DirectedGraph():
                 assert weight >= 0, "No negative weight !"
         self.__edges = edges
         self.vertices = edges.keys()
-    
+
     @property
     def vertices(self):
         return self.__vertices
@@ -60,31 +65,32 @@ class DirectedGraph():
                 if neighboor not in visited:
                     visited.append(neighboor)
                     depth_search_recursive(neighboor)
-            
+
         depth_search_recursive(initial)
-        return visited   
+        return visited
 
     def add_vertex(self, vertex):
         edges = self.edges
         edges[vertex] = {}
         self.edges = edges
-    
+
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
         del self.edges[vertex]
         self.vertices.remove(vertex)
-        
+
         for other in self.vertices:
-            self.remove_edge(other,vertex) 
-            
+            self.remove_edge(other, vertex)
+
     def add_edge(self, vertex1, vertex2, weight):
-        assert weight >= 0, "No negative weight !" 
+        assert weight >= 0, "No negative weight !"
         if vertex1 not in self.vertices:
             self.add_vertex(vertex1)
         if vertex2 not in self.vertices:
             self.add_vertex(vertex2)
 
-        assert vertex2 not in self.edges[vertex1].keys(), "Edge already exists !"
+        assert vertex2 not in self.edges[vertex1].keys(
+        ), "Edge already exists !"
 
         self.edges[vertex1][vertex2] = weight
 
@@ -103,9 +109,9 @@ class DirectedGraph():
         vertices = copy(self.vertices)
         for vertex in vertices:
             self.remove_vertex(vertex)
-        
+
     def induced_graph(self, subset, directed=True):
-        assert type(directed) == bool, "Directed argument must be bool"
+        assert isinstance(directed, bool), "Directed argument must be bool"
         new_edges = {}
 
         for vertex in subset:
@@ -115,16 +121,18 @@ class DirectedGraph():
             for other in subset:
                 if other in self.edges[vertex].keys():
                     new_edges[vertex][other] = self.edges[vertex][other]
-                    if directed == False and vertex not in new_edges[other].keys():
-                            new_edges[other][vertex] = self.edges[vertex][other]
-        if directed == True:
+                    if directed == False and vertex not in new_edges[other].keys(
+                    ):
+                        new_edges[other][vertex] = self.edges[vertex][other]
+        if directed:
             return DirectedGraph(new_edges)
         else:
             return UndirectedGraph(new_edges)
 
+
 class UndirectedGraph(DirectedGraph):
 
-    def __init__(self, edges= {}):
+    def __init__(self, edges={}):
         self.edges = edges
 
     @property
@@ -137,31 +145,33 @@ class UndirectedGraph(DirectedGraph):
             for weight in edges[vertex].values():
                 assert weight >= 0, "No negative weight !"
             for neighboor in edges[vertex].keys():
-                assert vertex in edges[neighboor].keys() and edges[vertex][neighboor] == edges[neighboor][vertex], "Incorrect edges !"
+                assert vertex in edges[neighboor].keys(
+                ) and edges[vertex][neighboor] == edges[neighboor][vertex], "Incorrect edges !"
         self.__edges = edges
         self.vertices = edges.keys()
-    
+
     def is_connected(self):
         initial = list(self.vertices)[0]
-        return len(self.vertices) == len(self.depth_search(initial))   
+        return len(self.vertices) == len(self.depth_search(initial))
 
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
         del self.edges[vertex]
-        
+
         for other in self.vertices:
-            self.remove_edge(other,vertex) 
+            self.remove_edge(other, vertex)
 
         self.vertices.remove(vertex)
 
     def add_edge(self, vertex1, vertex2, weight):
-        assert weight >= 0, "No negative weight !" 
+        assert weight >= 0, "No negative weight !"
         if vertex1 not in self.vertices:
             self.add_vertex(vertex1)
         if vertex2 not in self.vertices:
             self.add_vertex(vertex2)
 
-        assert vertex2 not in self.edges[vertex1].keys(), "Edge already exists !"
+        assert vertex2 not in self.edges[vertex1].keys(
+        ), "Edge already exists !"
 
         self.edges[vertex1][vertex2] = weight
         self.edges[vertex2][vertex1] = weight
