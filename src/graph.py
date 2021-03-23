@@ -1,5 +1,6 @@
 from copy import copy
-
+from heapq import heappush
+from heapq import heappop
 
 class DirectedGraph():
 
@@ -77,10 +78,11 @@ class DirectedGraph():
     def remove_vertex(self, vertex):
         assert vertex in self.vertices, "Vertex not in vertices !"
         del self.edges[vertex]
-        self.vertices.remove(vertex)
 
         for other in self.vertices:
             self.remove_edge(other, vertex)
+        
+        self.vertices = self.edges.keys()
 
     def add_edge(self, vertex1, vertex2, weight):
         assert weight >= 0, "No negative weight !"
@@ -106,7 +108,7 @@ class DirectedGraph():
         self.edges[vertex1][vertex2] = weight
 
     def reset(self):
-        vertices = copy(self.vertices)
+        vertices = list(self.vertices)
         for vertex in vertices:
             self.remove_vertex(vertex)
 
@@ -128,6 +130,76 @@ class DirectedGraph():
             return DirectedGraph(new_edges)
         else:
             return UndirectedGraph(new_edges)
+
+    def dijkstra_classique(self, initial):
+        assert initial in self.vertices, "Initial not in graph"
+        dist = {vertex : (float("inf"), None) for vertex in self}
+
+        dist[initial] = (0, None)
+
+        F = list(self.vertices)
+        F.sort()
+        while F:
+            current = min(F, key=dist.get)
+            F.remove(current)
+            for neighboor in self[current]:
+                if neighboor in F:
+                    new_dist = dist[current][0] + self[current][neighboor]
+                    if dist[neighboor][0] > new_dist:
+                        dist[neighboor] = (new_dist, current)
+
+        return(dist)
+
+    def dijkstra_heap(self, initial):
+        assert initial in self.vertices, "Initial not in graph"
+        
+        queue = [[0, initial]]
+        dist = {vertex : (float("inf"), None) for vertex in self}
+
+        dist[initial] = (0, None)
+
+        F = list(self.vertices)
+        F.sort()
+        while F and queue:
+            (current_dist, current) = heappop(queue)
+            while current not in F:
+                (current_dist, current) = heappop(queue)
+            F.remove(current)
+            for neighboor in self[current]:
+                if neighboor in F and dist[neighboor][0] > current_dist + self[current][neighboor]:
+                    dist[neighboor] = (dist[current][0] + self[current][neighboor], current)
+                    heappush(queue, [dist[neighboor][0], neighboor])
+                
+        return(dist)
+
+    def dijkstra_aimed(self, initial, end):
+
+        assert initial in self.vertices, "Initial not in graph"
+        assert end in self.vertices, "Initial not in graph"
+        
+        queue = [[0, initial]]
+        dist = {vertex : (float("inf"), None) for vertex in self}
+
+        dist[initial] = (0, None)
+
+        F = list(self.vertices)
+        while F and queue:
+            (current_dist, current) = heappop(queue)
+            while current not in F:
+                (current_dist, current) = heappop(queue)
+            F.remove(current)
+            if current == end:
+                break
+            for neighboor in self[current]:
+                if neighboor in F and dist[neighboor][0] > current_dist + self[current][neighboor]:
+                    dist[neighboor] = (dist[current][0] + self[current][neighboor], current)
+                    heappush(queue, [dist[neighboor][0], neighboor])
+                
+        return(dist)
+
+    def bellman_ford(self, initial):
+        assert type(self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
+
 
 
 class UndirectedGraph(DirectedGraph):
