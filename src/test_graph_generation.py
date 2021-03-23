@@ -10,14 +10,14 @@ def test_connected_undirected_graph():
     print("   Test generate_connected_graph")
 
     for i in range(10):
-        graph = generate_connected_graph(100, 100, False)
+        graph = generate_connected_graph(100, False)
         assert len(
             graph) == 100, "One of the graphs doesn't have the right number of vertices : \n" + str(graph)
 
     print("Test 1 : Ok : All graphs have the right number of vertices")
 
     for i in range(10):
-        graph = generate_connected_graph(100, 100, False)
+        graph = generate_connected_graph(100, False)
         assert graph.is_connected(), "One of the graphs isn't connected : \n" + str(graph)
 
     print("Test 2 : Ok : All graphs are connected")
@@ -81,14 +81,14 @@ def test_connected_directed_graph():
     print("   Test generate_connected_graph")
 
     for i in range(10):
-        graph = generate_connected_graph(100, 100, True)
+        graph = generate_connected_graph(100, True)
         assert len(
             graph) == 100, "One of the graphs doesn't have the right number of vertices : \n" + str(graph)
 
     print("Test 1 : Ok : All graphs have the right number of vertices")
 
     for i in range(10):
-        graph = generate_connected_graph(100, 100, True)
+        graph = generate_connected_graph(100, True)
         # erreur too many positional arguments du linter, mais le code passe
         # quand même
         unconnected_induced_graph = graph.induced_graph(graph.vertices, False)
@@ -163,7 +163,9 @@ def test_random_community_graph():
 
     print("Test2 : Ok : Graphs with prob (0, 0) has no edges")
 
-    nodes_per_community = [randint(25, 50) for i in range(100)]
+    number_of_communities = 100
+
+    nodes_per_community = [randint(25, 50) for i in range(number_of_communities)]
     p_intra = random()
     p_inter = random()
 
@@ -210,13 +212,17 @@ def test_random_community_graph():
             solid_community += 1
         if inter_community_edge >= inter_trust_min and inter_community_edge <= inter_trust_sup:
             successful_community += 1
+    
+    solid_rate = float(solid_community) / float(number_of_communities) * 100.
+    successful_rate = float(successful_community) / float(number_of_communities) * 100.
+
     print(
         "Test 3.1 : " +
-        str(solid_community) +
+        str(solid_rate) +
         " of 100 communities are solid")
     print(
         "Test 3.2 : " +
-        str(successful_community) +
+        str(successful_rate) +
         " of 100 communities are successful")
 
 
