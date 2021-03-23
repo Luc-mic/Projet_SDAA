@@ -1,8 +1,7 @@
 workspace.code-workspace
 Sujet\ projet.pdf
 src/__pycache__/
-<<<<<<< HEAD
 soc-redditHyperlinks-title.TSV
-=======
 tests.py
->>>>>>> 807fd7d7f82d2afab0a2df243f2696693a0eae3a
+test/__pycache__/
+tests.py
