@@ -1,7 +1,9 @@
 workspace.code-workspace
 Sujet\ projet.pdf
-src/__pycache__/
-test/__pycache__/
 tests.py
-data/
-data/*
+
+src/__pycache__/
+reddit/__pycache__/
+test/__pycache__/
+
+data/reddit.tsv
