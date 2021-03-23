@@ -16,11 +16,11 @@ seed()
 # and n(n-1) (number of edges in a complete unoriented graph)
 
 
-def generate_random_weight(n_vertices, n_edges):
-    return randint(0, n_edges)
+def generate_random_weight(n_vertices):
+    return randint(0, n_vertices * 2)
 
 
-def generate_connected_graph(n_vertices, n_edges, directed=False):
+def generate_connected_graph(n_vertices, directed=False):
 
     edges = {i: {} for i in range(n_vertices)}
 
@@ -34,7 +34,7 @@ def generate_connected_graph(n_vertices, n_edges, directed=False):
         connected_vertices.append(unconnected_vertex)
         unconnected_vertices.remove(unconnected_vertex)
 
-        wheight = generate_random_weight(n_vertices, n_edges)
+        wheight = generate_random_weight(n_vertices)
 
         edges[connected_vertex][unconnected_vertex] = wheight
 
@@ -43,6 +43,7 @@ def generate_connected_graph(n_vertices, n_edges, directed=False):
 
     if not directed:
         return UndirectedGraph(edges)
+    
     if directed:
         return DirectedGraph(edges)
 
@@ -54,7 +55,7 @@ def generate_random_graph(n_vertices, n_edges, directed=False):
     if directed:
         assert n_edges <= n_vertices * (n_vertices - 1), "Too many edges !"
 
-    random_graph = generate_connected_graph(n_vertices, n_edges, directed)
+    random_graph = generate_connected_graph(n_vertices, directed)
 
     for i in range(n_edges - (n_vertices - 1)):
 
@@ -77,9 +78,7 @@ def generate_random_graph(n_vertices, n_edges, directed=False):
 
         vertex2 = choice(other_vertices)
 
-        random_graph.add_edge(
-            vertex1, vertex2, generate_random_weight(
-                n_vertices, n_edges))
+        random_graph.add_edge(vertex1, vertex2, generate_random_weight(n_vertices))
 
     return random_graph
 
@@ -105,14 +104,11 @@ def generate_random_community_graph(nodes_per_community, p_intra, p_inter):
             for vertex2 in community1[community1.index(vertex1) + 1:]:
                 if random() < p_intra:
                     graph.add_edge(
-                        vertex1, vertex2, generate_random_weight(
-                            n_vertices, n_vertices))
+                        vertex1, vertex2, generate_random_weight(n_vertices))
 
             for community2 in communities[communities.index(community1) + 1:]:
                 for vertex2 in community2:
                     if random() < p_inter:
-                        graph.add_edge(
-                            vertex1, vertex2, generate_random_weight(
-                                n_vertices, n_vertices))
+                        graph.add_edge(vertex1, vertex2, generate_random_weight(n_vertices))
 
     return graph
