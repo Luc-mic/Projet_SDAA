@@ -1,6 +1,7 @@
 from copy import copy
 from heapq import heappush
 from heapq import heappop
+from networkx import DiGraph
 
 class DirectedGraph():
 
@@ -201,6 +202,22 @@ class DirectedGraph():
 
     def bellman_ford(self, initial):
         assert type(self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
+
+    def to_networkx(self):
+        assert type(self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
+
+        networkx_graph = DiGraph()
+
+        for vertex in self.vertices:
+            networkx_graph.add_node(vertex)
+        
+        for vertex in self.vertices:
+            for neighboor in self.edges[vertex]:
+                networkx_graph.add_edge(vertex, neighboor, weight=self.edges[vertex][neighboor])
+
+        return networkx_graph
+
+
 
 
 
