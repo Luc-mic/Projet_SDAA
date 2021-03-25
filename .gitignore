@@ -8,3 +8,8 @@ reddit/__pycache__/
 test/__pycache__/
 
 data/
+soc-redditHyperlinks-title.TSV
+tests.py
+test/__pycache__/
+tests.py
+main.py
