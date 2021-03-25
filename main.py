@@ -13,6 +13,7 @@ def tests():
     test_graph_generation()
     test_dijkstra()
 
+tests()
 
 def reddit():
 
@@ -24,15 +25,12 @@ def reddit():
     print("")
     subreddit_activity(reddit_graph)
     print("")
-    t = time.time()
+    # t = time.time()
     subbredit_shortest_path(reddit_graph, "disney", "vegan")
-    print(time.time() - t)
-    t = time.time()
+    # print(time.time() - t)
+    # t = time.time()
     subbredit_shortest_path(reddit_graph, "greenbaypackers", "missouripolitics")
-    print(time.time() - t)
-    t = time.time()
-    reddit_graph.dijkstra_heap("disney")
-    print(time.time() - t)
+    #print(time.time() - t)
     print("")
 
 reddit()
