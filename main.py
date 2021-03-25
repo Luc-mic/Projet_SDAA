@@ -38,8 +38,8 @@ def reddit():
     print("")
 
 
-tests()
-reddit()
+#tests()
+#reddit()
 
 time_generate_graph(10, 500, 10, 10)
 time_generate_graph_alpha(70, 30, 30)
