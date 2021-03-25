@@ -25,7 +25,7 @@ classDef not_done fill:#FF8000;
     5.1:::done
     5.2:::done
     5.3:::done
-    6.1:::not_done
+    6.1:::done
     6.2:::not_done
 
     Start-->|Lucas|1.1;

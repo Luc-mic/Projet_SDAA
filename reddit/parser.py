@@ -16,6 +16,7 @@ def read_file(file_name):
 
 def create_graph_from_edges(links_list):
     graph = DirectedGraph()
+    graph.reset()
 
     for sub1, sub2 in set(links_list):
         if sub1 not in graph.edges:

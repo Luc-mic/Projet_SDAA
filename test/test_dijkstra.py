@@ -19,6 +19,7 @@ def test_dijkstra_classique():
 
     del graph
 
+
 def test_dijkstra_heap():
     print("   Tests Dijkstra heap")
 
@@ -34,32 +35,31 @@ def test_dijkstra_heap():
 
     del graph
 
+
 def test_dijkstra_comparatif():
 
     print("   Tests Dijkstra comparatif")
 
     for i in range(50):
-        graph1 = generate_random_graph(500, 1000, True)
+        graph = generate_random_graph(500, 1000, True)
 
-        res_dijkstra_classique = graph1.dijkstra_classique(0)
-        res_dijkstra_heap = graph1.dijkstra_heap(0)
+        res_dijkstra_classique = graph.dijkstra_classique(0)
+        res_dijkstra_heap = graph.dijkstra_heap(0)
 
         assert [res_dijkstra_classique[i][0] for i in range(len(res_dijkstra_classique))] == [res_dijkstra_heap[i][0] for i in range(len(res_dijkstra_heap))], "Djikstra classique != Dijkstra heap directed graph \n" + str(res_dijkstra_classique) + "\n" + str(res_dijkstra_heap) + "\n" + str(graph1)
-
+        del graph
     print("Test 1 : Ok : Djikstra classique == Dijkstra heap for directed graph")
 
     for i in range(50):
-        graph2 = generate_random_graph(500, 1000, False)
+        graph = generate_random_graph(500, 1000, False)
 
-        res_dijkstra_classique = graph2.dijkstra_classique(0)
-        res_dijkstra_heap = graph2.dijkstra_heap(0)
+        res_dijkstra_classique = graph.dijkstra_classique(0)
+        res_dijkstra_heap = graph.dijkstra_heap(0)
 
         assert [res_dijkstra_classique[i][0] for i in range(len(res_dijkstra_classique))] == [res_dijkstra_heap[i][0] for i in range(len(res_dijkstra_heap))], "Djikstra classique != Dijkstra heap undirected graph \n" + str(res_dijkstra_classique) + "\n" + str(res_dijkstra_heap) + "\n" + str(graph1)
-
+        del graph
     print("Test 2 : Ok : Djikstra classique == Dijkstra heap undirected graph")
 
-    del graph1
-    del graph2
 
 
 def test_dijkstra_aimed():
@@ -80,9 +80,11 @@ def test_dijkstra_aimed():
 
 def test_bellman_ford():
     graph = DirectedGraph()
+    graph.reset()
     graph.bellman_ford(0)
 
     del graph
+
 
 def test_dijkstra():
     print("\nTests Dijkstra")
