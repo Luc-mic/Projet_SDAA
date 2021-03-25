@@ -3,6 +3,7 @@ from heapq import heappush
 from heapq import heappop
 from networkx import DiGraph
 
+
 class DirectedGraph():
 
     def __init__(self, edges={}):
@@ -81,7 +82,7 @@ class DirectedGraph():
 
         for other in self.vertices:
             self.remove_edge(other, vertex)
-        
+
         self.vertices = self.edges.keys()
 
     def add_edge(self, vertex1, vertex2, weight):
@@ -133,12 +134,11 @@ class DirectedGraph():
 
     def dijkstra_classique(self, initial):
         assert initial in self.vertices, "Initial not in graph"
-        dist = {vertex : (float("inf"), None) for vertex in self}
+        dist = {vertex: (float("inf"), None) for vertex in self}
 
         dist[initial] = (0, None)
 
-        F = list(self.vertices)
-        F.sort()
+        F = sorted(self.vertices)
         while F:
             current = min(F, key=dist.get)
             F.remove(current)
@@ -154,8 +154,8 @@ class DirectedGraph():
         assert initial in self.vertices, "Initial not in graph"
 
         queue = [[0, initial]]
-        dist = {vertex : (float("inf"), None) for vertex in self}
-        not_seen = {vertex : True for vertex in self}
+        dist = {vertex: (float("inf"), None) for vertex in self}
+        not_seen = {vertex: True for vertex in self}
 
         dist[initial] = (0, None)
 
@@ -165,22 +165,22 @@ class DirectedGraph():
                 (current_dist, current) = heappop(queue)
             not_seen[current] == False
             for neighboor in self[current]:
-                if not_seen[neighboor] == True:
+                if not_seen[neighboor]:
                     new_dist = current_dist + self[current][neighboor]
                     if dist[neighboor][0] > new_dist:
                         dist[neighboor] = (new_dist, current)
                         heappush(queue, [dist[neighboor][0], neighboor])
-                
+
         return(dist)
 
     def dijkstra_aimed(self, initial, end):
 
         assert initial in self.vertices, "Initial not in graph"
         assert end in self.vertices, "Initial not in graph"
-        
+
         queue = [[0, initial]]
-        dist = {vertex : (float("inf"), None) for vertex in self}
-        not_seen = {vertex : True for vertex in self}
+        dist = {vertex: (float("inf"), None) for vertex in self}
+        not_seen = {vertex: True for vertex in self}
 
         dist[initial] = (0, None)
 
@@ -192,12 +192,12 @@ class DirectedGraph():
             if current == end:
                 break
             for neighboor in self[current]:
-                if not_seen[neighboor] == True:
+                if not_seen[neighboor]:
                     new_dist = current_dist + self[current][neighboor]
                     if dist[neighboor][0] > new_dist:
                         dist[neighboor] = (new_dist, current)
                         heappush(queue, [dist[neighboor][0], neighboor])
-                
+
         return(dist)
 
     def bellman_ford(self, initial):
@@ -210,15 +210,12 @@ class DirectedGraph():
 
         for vertex in self.vertices:
             networkx_graph.add_node(vertex)
-        
+
         for vertex in self.vertices:
             for neighboor in self.edges[vertex]:
                 networkx_graph.add_edge(vertex, neighboor, weight=self.edges[vertex][neighboor])
 
         return networkx_graph
-
-
-
 
 
 class UndirectedGraph(DirectedGraph):

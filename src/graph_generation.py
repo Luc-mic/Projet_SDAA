@@ -43,7 +43,7 @@ def generate_connected_graph(n_vertices, directed=False):
 
     if not directed:
         return UndirectedGraph(edges)
-    
+
     if directed:
         return DirectedGraph(edges)
 

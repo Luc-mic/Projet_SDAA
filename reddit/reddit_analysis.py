@@ -2,7 +2,8 @@ from heapq import heappushpop
 from heapq import heappop
 from reddit import parser
 
-data_path = "../data/reddit.tsv" 
+data_path = "../data/reddit.tsv"
+
 
 def n_most_active_subreddits(graph, n):
     n_most_popular = [(0, "") for i in range(n)]
@@ -33,7 +34,7 @@ def subreddit_activity(graph):
     links_in_graph = 0
     for vertex in graph:
         links_in_graph += len(graph[vertex])
-    
+
     links_in_most_active_subreddits = 0
 
     while most_active_subbredits:
@@ -45,4 +46,3 @@ def subreddit_activity(graph):
 
 def subbredit_shortest_path(graph, initial, final):
     print("Distance from " + str(initial) + " to " + str(final) + " is " + str(graph.dijkstra_aimed(initial, final)[final][0]) + ".")
-

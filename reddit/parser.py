@@ -1,6 +1,7 @@
 from src.graph import DirectedGraph
 import time
 
+
 def read_file(file_name):
     subreddit_file = open(file_name)
     subreddit_links_list = subreddit_file.readlines()[1:]

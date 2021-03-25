@@ -22,7 +22,7 @@ def tests():
 def reddit():
 
     data_path = "data/reddit.tsv"
-    
+
     reddit_graph = parser.create_graph(data_path)
 
     subreddit_degree(reddit_graph)
@@ -37,11 +37,11 @@ def reddit():
     #print(time.time() - t)
     print("")
 
+
 tests()
 reddit()
 
 time_generate_graph(10, 500, 10, 10)
 time_generate_graph_alpha(70, 30, 30)
 time_court_chemin_graph(10, 300, 10, 30)
-time_court_chemin_graph_alpha(150,30,10)
-
+time_court_chemin_graph_alpha(150, 30, 10)

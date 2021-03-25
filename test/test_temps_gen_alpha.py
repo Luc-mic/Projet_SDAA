@@ -47,6 +47,7 @@ def time_generate_graph_alpha(m, nb_valeur, nb_repetition=1):
     plt.show()
     return
 
+
 def time_court_chemin_graph_alpha(m, nb_valeur, nb_repetition=1):
     t_dijkstra = []
     t_heap = []

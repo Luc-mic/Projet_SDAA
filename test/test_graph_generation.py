@@ -212,7 +212,7 @@ def test_random_community_graph():
             solid_community += 1
         if inter_community_edge >= inter_trust_min and inter_community_edge <= inter_trust_sup:
             successful_community += 1
-    
+
     solid_rate = float(solid_community) / float(number_of_communities) * 100.
     successful_rate = float(successful_community) / float(number_of_communities) * 100.
 
