@@ -7,7 +7,7 @@ from random import random
 
 
 def test_connected_undirected_graph():
-    print("   Test generate_connected_graph")
+    print("\n   Test generate_connected_graph")
 
     for i in range(10):
         graph = generate_connected_graph(100, False)
@@ -28,31 +28,26 @@ def test_random_undirected_graph():
 
     # Vérifie le nombre sommets
 
-    for i in range(10):
-        graph = generate_random_graph(100, 100, False)
+    for i in range(100):
+        graph = generate_random_graph(100, 1000, False)
         assert len(
             graph) == 100, "One of the graphs doesn't have the right number of vertices : \n" + str(graph)
 
-    print("Test 1 : Ok : All graphs have the right number of vertices")
-
-    # Vérifie le nombre d'edges pour des graphes quelconques
-
-    for i in range(10):
-        graph = generate_random_graph(100, 100, False)
         edges = 0
         for vertex in graph:
             edges += len(graph.edges[vertex].keys())
         edges = edges / 2
-
-        assert edges == 100, "One of the graphs doesn't have the right number of edges : " + \
+        assert edges == 1000, "One of the graphs doesn't have the right number of edges : " + \
             str(edges) + "for : \n" + str(graph)
+
+    print("Test 1 : Ok : All graphs have the right number of vertices")
 
     # Vérifie que que l'erreur surgit lorsque edges < vertices - 1
     #graph = generate_random_graph(100, 98)
 
     # Vérifie le cas limite edges = verices - 1
-    graph = generate_random_graph(100, 99, False)
     edges = 0
+    graph = generate_random_graph(100, 99, False)
     for vertex in graph:
         edges += len(graph.edges[vertex].keys())
     edges = edges / 2
@@ -61,7 +56,7 @@ def test_random_undirected_graph():
         str(edges) + "for : \n" + str(graph)
 
     # Vérifie que que l'erreur surgit lorsque edges > vertices * (vertices - 1) / 2
-    #graph = generate_random_graph(100, 4951)
+    # graph = generate_random_graph(100, 4951)
 
     # Vérifie le cas limite edges = vertices * (vertices - 1) / 2
 
@@ -165,7 +160,8 @@ def test_random_community_graph():
 
     number_of_communities = 100
 
-    nodes_per_community = [randint(25, 50) for i in range(number_of_communities)]
+    nodes_per_community = [randint(25, 50)
+                           for i in range(number_of_communities)]
     p_intra = random()
     p_inter = random()
 
@@ -214,7 +210,8 @@ def test_random_community_graph():
             successful_community += 1
 
     solid_rate = float(solid_community) / float(number_of_communities) * 100.
-    successful_rate = float(successful_community) / float(number_of_communities) * 100.
+    successful_rate = float(successful_community) / \
+        float(number_of_communities) * 100.
 
     print(
         "Test 3.1 : " +

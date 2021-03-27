@@ -1,7 +1,7 @@
 from heapq import heappushpop
 from heapq import heappop
 from reddit import parser
-
+from time import time
 data_path = "../data/reddit.tsv"
 
 
@@ -29,7 +29,8 @@ def subreddit_degree(graph):
 
 
 def subreddit_activity(graph):
-    most_active_subbredits = n_most_active_subreddits(graph, len(graph) * 2 // 100)
+    most_active_subbredits = n_most_active_subreddits(
+        graph, len(graph) * 2 // 100)
 
     links_in_graph = 0
     for vertex in graph:
@@ -41,8 +42,13 @@ def subreddit_activity(graph):
         (links, vertex) = heappop(most_active_subbredits)
         links_in_most_active_subreddits += links
 
-    print("2% most active subreddits represent " + str(links_in_most_active_subreddits / links_in_graph * 100) + r"% of subreddits activity.")
+    print("2% most active subreddits represent " +
+          str(links_in_most_active_subreddits /
+              links_in_graph *
+              100) +
+          r"% of subreddits activity.")
 
 
 def subbredit_shortest_path(graph, initial, final):
-    print("Distance from " + str(initial) + " to " + str(final) + " is " + str(graph.dijkstra_aimed(initial, final)[final][0]) + ".")
+    print("Distance from " + str(initial) + " to " + str(final) +
+          " is " + str(graph.dijkstra_aimed(initial, final)[final][0]) + ".")

@@ -2,14 +2,19 @@ from reddit.reddit_analysis import subreddit_degree
 from reddit.reddit_analysis import subreddit_activity
 from reddit.reddit_analysis import subbredit_shortest_path
 from reddit import parser
-from test.test_graph import test_graph
-from test.test_graph_generation import test_graph_generation
+
 from test.test_dijkstra import test_dijkstra
-import time
-from test.test_graph_generation import *
-from test.test_temps_generation import time_generate_graph, time_court_chemin_graph
-from test.test_dijkstra import *
-from test.test_temps_gen_alpha import *
+from test.test_graph import test_graph
+from test.test_temps_generation import time_court_chemin_graph
+from test.test_temps_generation import time_generate_graph
+from test.test_graph_generation import test_graph_generation
+from test.test_temps_gen_alpha import time_court_chemin_graph_alpha
+from test.test_temps_gen_alpha import time_generate_graph_alpha
+
+from src.graph_generation import generate_random_graph
+
+from networkx import draw
+import matplotlib.pyplot as plt
 
 
 def tests():
@@ -33,15 +38,33 @@ def reddit():
     subbredit_shortest_path(reddit_graph, "disney", "vegan")
     # print(time.time() - t)
     # t = time.time()
-    subbredit_shortest_path(reddit_graph, "greenbaypackers", "missouripolitics")
+    subbredit_shortest_path(
+        reddit_graph,
+        "greenbaypackers",
+        "missouripolitics")
     #print(time.time() - t)
     print("")
 
 
-#tests()
-#reddit()
+def networkx_test():
 
-time_generate_graph(10, 500, 10, 10)
-time_generate_graph_alpha(70, 30, 30)
-time_court_chemin_graph(10, 300, 10, 30)
-time_court_chemin_graph_alpha(150, 30, 10)
+    # On cherche simplement à afficher un petit graphe dans un fichier png. La
+    # vitesse de networkx a été comparé dans la "course" des algorithmes, et
+    # est visible dans le rapport.
+
+    graph = generate_random_graph(5, 10, True)
+    networkx_reddit_graph = graph.to_networkx()
+
+    draw(networkx_reddit_graph, with_labels=True)
+
+    plt.savefig("graph.png")
+
+
+# tests()
+# reddit()
+# networkx_test()
+
+#time_generate_graph(500, 1510, 100, 5, 0.7)
+#time_court_chemin_graph(500, 1510, 100, 5, 0.7)
+#time_generate_graph_alpha(1000, 5, 5)
+#time_court_chemin_graph_alpha(1500, 5, 5)

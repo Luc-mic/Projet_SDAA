@@ -1,9 +1,11 @@
 from src.graph import UndirectedGraph
 from src.graph import DirectedGraph
+from copy import copy
 from random import choice
 from random import randint
 from random import random
 from random import seed
+from random import shuffle
 
 
 seed()
@@ -25,14 +27,14 @@ def generate_connected_graph(n_vertices, directed=False):
     edges = {i: {} for i in range(n_vertices)}
 
     unconnected_vertices = [i for i in range(1, n_vertices)]
+    shuffle(unconnected_vertices)
     connected_vertices = [0]
 
     while unconnected_vertices:
         connected_vertex = choice(connected_vertices)
-        unconnected_vertex = choice(unconnected_vertices)
+        unconnected_vertex = unconnected_vertices.pop()
 
         connected_vertices.append(unconnected_vertex)
-        unconnected_vertices.remove(unconnected_vertex)
 
         wheight = generate_random_weight(n_vertices)
 
@@ -57,28 +59,36 @@ def generate_random_graph(n_vertices, n_edges, directed=False):
 
     random_graph = generate_connected_graph(n_vertices, directed)
 
+    free_others = {}  # dict that keep tracks of vertices having no edge with the key vertex
+    available = []
+    for vertex in random_graph:
+
+        free_others[vertex] = list(
+            set(random_graph.vertices) - set([vertex]) - set(random_graph[vertex].keys()))
+        if free_others[vertex]:
+            available.append(vertex)
+        # allows a legit use of pop(), which is faster that remove()
+        shuffle(free_others[vertex])
+
+    vertex1 = choice(list(random_graph.vertices))
+
     for i in range(n_edges - (n_vertices - 1)):
 
-        # The available list helps when the graph start to be filled with edges
-        available = []
+        vertex1 = choice(available)
+        vertex2 = free_others[vertex1].pop()
 
-        for vertex in random_graph:
-            if len(random_graph.edges[vertex]) != n_vertices - 1:
-                available.append(vertex)
+        if not directed:
+            # less efficient for undirected graphs
+            free_others[vertex2].remove(vertex1)
+            if not free_others[vertex2]:
+                available.remove(vertex2)
+        random_graph.add_edge(
+            vertex1,
+            vertex2,
+            generate_random_weight(n_vertices))
 
-        other_vertices = []
-
-        while other_vertices == []:
-
-            vertex1 = choice(available)
-
-            other_vertices = list(set(random_graph.vertices) -
-                                  set(random_graph.edges[vertex1].keys()) -
-                                  set([vertex1]))
-
-        vertex2 = choice(other_vertices)
-
-        random_graph.add_edge(vertex1, vertex2, generate_random_weight(n_vertices))
+        if not free_others[vertex1]:
+            available.remove(vertex1)
 
     return random_graph
 
@@ -109,6 +119,7 @@ def generate_random_community_graph(nodes_per_community, p_intra, p_inter):
             for community2 in communities[communities.index(community1) + 1:]:
                 for vertex2 in community2:
                     if random() < p_inter:
-                        graph.add_edge(vertex1, vertex2, generate_random_weight(n_vertices))
+                        graph.add_edge(
+                            vertex1, vertex2, generate_random_weight(n_vertices))
 
     return graph

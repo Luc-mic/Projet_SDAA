@@ -2,6 +2,7 @@ from copy import copy
 from heapq import heappush
 from heapq import heappop
 from networkx import DiGraph
+import math
 
 
 class DirectedGraph():
@@ -53,6 +54,20 @@ class DirectedGraph():
     @vertices.setter
     def vertices(self, vertices):
         self.__vertices = vertices
+
+    def get_edges_list(self):
+
+        assert type(
+            self).__name__ == "DirectedGraph", "This is only implemented for directed graphs, to be used in Bellman - Ford algorithm"
+
+        edges_list = []
+
+        for vertex1 in self:
+            for vertex2 in self[vertex1]:
+                edges_list.append(
+                    vertex1, vertex2, self.edges[vertex1][vertex2])
+
+        return edges_list
 
     def is_complete(self):
         for vertex in self.vertices:
@@ -161,15 +176,15 @@ class DirectedGraph():
 
         while queue:
             (current_dist, current) = heappop(queue)
-            while not_seen[current] == False:
-                (current_dist, current) = heappop(queue)
-            not_seen[current] == False
-            for neighboor in self[current]:
-                if not_seen[neighboor]:
-                    new_dist = current_dist + self[current][neighboor]
-                    if dist[neighboor][0] > new_dist:
-                        dist[neighboor] = (new_dist, current)
-                        heappush(queue, [dist[neighboor][0], neighboor])
+            if not_seen[current]:
+                not_seen[current] = False
+                a = self[current]
+                for neighboor in a:
+                    if not_seen[neighboor]:
+                        new_dist = current_dist + a[neighboor]
+                        if dist[neighboor][0] > new_dist:
+                            dist[neighboor] = (new_dist, current)
+                            heappush(queue, [dist[neighboor][0], neighboor])
 
         return(dist)
 
@@ -186,25 +201,21 @@ class DirectedGraph():
 
         while queue:
             (current_dist, current) = heappop(queue)
-            while not_seen[current] == False:
-                (current_dist, current) = heappop(queue)
-            not_seen[current] == False
-            if current == end:
-                break
-            for neighboor in self[current]:
-                if not_seen[neighboor]:
-                    new_dist = current_dist + self[current][neighboor]
-                    if dist[neighboor][0] > new_dist:
-                        dist[neighboor] = (new_dist, current)
-                        heappush(queue, [dist[neighboor][0], neighboor])
-
+            if not_seen[current]:
+                not_seen[current] = False
+                if current == end:
+                    break
+                for neighboor in self[current]:
+                    if not_seen[neighboor]:
+                        new_dist = current_dist + self[current][neighboor]
+                        if dist[neighboor][0] > new_dist:
+                            dist[neighboor] = (new_dist, current)
+                            heappush(queue, [dist[neighboor][0], neighboor])
         return(dist)
 
-    def bellman_ford(self, initial):
-        assert type(self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
-
     def to_networkx(self):
-        assert type(self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
+        assert type(
+            self).__name__ == "DirectedGraph", "Bellman-Ford cannot be used on undirected graphs"
 
         networkx_graph = DiGraph()
 
@@ -213,9 +224,33 @@ class DirectedGraph():
 
         for vertex in self.vertices:
             for neighboor in self.edges[vertex]:
-                networkx_graph.add_edge(vertex, neighboor, weight=self.edges[vertex][neighboor])
+                networkx_graph.add_edge(
+                    vertex, neighboor, weight=self.edges[vertex][neighboor])
 
         return networkx_graph
+
+    def dijkstra_lucas(self, initial):
+        assert initial in self.vertices, "Initial not in graph"
+
+        queue = [[0, initial]]
+        dist = {vertex: (math.inf, None) for vertex in self}
+        not_seen = {vertex: True for vertex in self}
+
+        dist[initial] = (0, None)
+
+        while queue:
+            (current_dist, current) = heappop(queue)
+            if not_seen[current]:
+                not_seen[current] = False
+                a = self[current]
+                for neighboor in a:
+                    if not_seen[neighboor]:
+                        new_dist = current_dist + a[neighboor]
+                        if dist[neighboor][0] > new_dist:
+                            dist[neighboor] = (new_dist, current)
+                            heappush(queue, [dist[neighboor][0], neighboor])
+
+        return(dist)
 
 
 class UndirectedGraph(DirectedGraph):
